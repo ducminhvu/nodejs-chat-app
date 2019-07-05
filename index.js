@@ -8,6 +8,15 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', (socket) => {
+  socket.on('client-send-new-user', (username) => {
+    socket.username = username;
+
+    socket.broadcast.emit('server-send-new-user', {
+      username: socket.username,
+      id: socket.id
+    })
+  });
+
   socket.on('client-send-desc', (data) => {
     io.emit('server-send-desc', data);
   });
